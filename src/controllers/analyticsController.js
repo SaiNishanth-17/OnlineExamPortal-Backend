@@ -193,16 +193,16 @@ exports.getSubjectPerformance = async (req, res) => {
       {
         $lookup: {
           from: "subjects",
-          localField: "subjectId",
-          foreignField: "_id",
+          localField: "examName",
+          foreignField: "subjectName", 
           as: "subject"
         }
       },
       { $unwind: "$subject" },
       {
         $group: {
-          _id: "$subjectId",
-          subjectName: { $first: "$subject.subjectName" },
+          _id: "$examName",
+          subjectName: { $first: "$examName" },
           avgScore: { $avg: "$score" },
           attempts: { $sum: 1 }
         }
@@ -217,7 +217,7 @@ exports.getSubjectPerformance = async (req, res) => {
       },
       { $sort: { avgScore: -1 } }
     ]);
- 
+
     res.json(result);
   } catch (err) {
     res.status(500).json({ message: err.message });
