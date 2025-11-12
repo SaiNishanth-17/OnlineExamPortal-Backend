@@ -4,6 +4,7 @@ const passport = require("passport");
 
 require("./src/config/passport")(passport);
 
+const headerSet = require("./src/middlewares/cspMiddleware");
 const logger = require("./src/middlewares/logger");
 const errorHandler = require("./src/middlewares/errorHandler");
 
@@ -15,6 +16,7 @@ const submitExamRoutes = require("./src/routes/submitExamRoutes");
 
 const app = express();
 
+app.use(headerSet);
 app.use(logger);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
