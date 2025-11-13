@@ -12,7 +12,7 @@ const { checkRole } = require("../middlewares/checkRole");
 router
   .route("/:subject/:difficulty")
   .post(validateCreateQuestion, validateRequest,authenticate,checkRole(['admin']), questionController.createQuestion)
-  .get(questionController.getQuestionsBySubjectAndDifficulty);
+  .get(authenticate, questionController.getQuestionsBySubjectAndDifficulty);
 
 router
   .route("/:subject/:difficulty/:id")
