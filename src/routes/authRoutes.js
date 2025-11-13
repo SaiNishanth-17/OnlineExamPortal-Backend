@@ -28,7 +28,7 @@ router.post('/login', loginValidation, (req, res, next) => {
  
 router.get('/allUsers', authenticate,checkRole(['admin']), getAllUsers);
  
-router.get('/students/:id', getUserByID);
+router.get('/students/:id',authenticate, getUserByID);
  
 router.put('/profile', authenticate, checkRole(['admin','student']), validateUpdateProfile, validateRequest, updateOwnProfile);
  

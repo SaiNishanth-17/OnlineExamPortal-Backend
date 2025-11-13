@@ -11,7 +11,7 @@ const authenticate = require("../middlewares/authMiddleware");
 const { checkRole } = require("../middlewares/checkRole");
 
 router.post("/", validateCreateSubject, validateRequest, authenticate,checkRole(['admin']),subjectController.createSubject);
-router.get("/", subjectController.getAllSubjects);
+router.get("/", authenticate, subjectController.getAllSubjects);
 router.put("/:name", validateUpdateSubject, validateRequest, authenticate,checkRole(['admin']),subjectController.updateSubjectByName);
 router.delete("/:name", validateSubjectName, validateRequest, authenticate,checkRole(['admin']),subjectController.deleteSubjectByName);
 

@@ -9,14 +9,15 @@ const {
   getStudentPerformance,
   getSubjectPerformance
 } = require('../controllers/analyticsController');
+const authenticate = require('../middlewares/authMiddleware');
 
-router.get("/student/overall/:userId", getOverallStats);
-router.get("/student/progress/:userId", getProgress);
-router.get("/student/difficulty/:userId", getDifficultyAnalytics);
-router.get("/student/leaderboard", getLeaderboard);
+router.get("/student/overall/:userId", authenticate,getOverallStats);
+router.get("/student/progress/:userId", authenticate, getProgress);
+router.get("/student/difficulty/:userId", authenticate, getDifficultyAnalytics);
+router.get("/student/leaderboard",authenticate, getLeaderboard);
 
-router.get("/admin/stats", getAdminStats);
-router.get("/admin/students", getStudentPerformance);
-router.get("/admin/subjects", getSubjectPerformance);
+router.get("/admin/stats", authenticate, getAdminStats);
+router.get("/admin/students", authenticate, getStudentPerformance);
+router.get("/admin/subjects", authenticate, getSubjectPerformance);
 
 module.exports = router;
