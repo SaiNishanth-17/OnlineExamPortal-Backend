@@ -41,16 +41,37 @@ exports.getProgress = async (req, res) => {
     const totalSubjects = await Subject.countDocuments();
     const totalPossible = totalSubjects * 3;
  
-    const completed = await CompletedExam.countDocuments({ userId });
+    const uniqueCombinations = await CompletedExam.aggregate([
+      { $match: { userId: new mongoose.Types.ObjectId(userId) } },
+      {
+        $group: {
+          _id: {
+            examName: "$examName",
+            difficulty: "$difficulty",
+          },
+        },
+      },
+      { $count: "count" }
+    ]);
  
-    const progress = Math.round((completed / totalPossible) * 100);
+    const completedUnique = uniqueCombinations.length > 0
+      ? uniqueCombinations[0].count
+      : 0;
  
-    res.json({ progress });
+    let progress = Math.round((completedUnique / totalPossible) * 100);
+ 
+    if (progress > 100) progress = 100;
+ 
+    res.json({
+      progress,
+      totalPossible,
+      completedUnique
+    });
+ 
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
-};
- 
+}; 
  
 exports.getDifficultyAnalytics = async (req, res) => {
   try {
